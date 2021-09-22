@@ -16,10 +16,6 @@ const data = require("./data");
 const printPlayersDetails = (playersList) => {
     let result = '';
 
-    if (typeof playersList !== 'object') {
-        return console.log('ERROR: Handling error as playersList is not a type of object so it is not iterable');
-    }
-
     playersList.forEach((player, index) => {
         result += `PLAYER ${index + 1}\n`;
         for (const [key, value] of Object.entries(player)) {
@@ -34,12 +30,12 @@ const printPlayersDetails = (playersList) => {
 // const playersArray = data.getPlayers();
 // // Test for expected behaviour
 // printPlayersDetails(playersArray);
-// // Test for not iterable argument
-// printPlayersDetails('hello');
-// // Test for iterable argument that doesn't have to expected structure
-// printPlayersDetails(['hell', 'hello'])
-// // Test for iterable argument that doesn't have to expected structure
-// printPlayersDetails([3, 3])
+
+// NOTE
+// type checking can be added to avoid runtime error if argument is not iterable
+// if (typeof playersList !== 'object') {
+//  return console.log('ERROR: Handling error as playersList is not a type of object so it is not iterable');
+// }
 
 /**
  * Test 2
@@ -48,23 +44,29 @@ const printPlayersDetails = (playersList) => {
 
 // Your code
 // REFACTOR data naming possible structure?
-const getNamesArray = (playersData) => {
-    return playersData.map((player) => player.name);
+const getNamesArray = (playersList) => {
+    return playersList.map((player) => player.name);
 }
 
 const getDescendingNamesArray = (namesArray) => {
     return namesArray.sort((a, b) => (a.length < b.length) ? 1 : -1)
 }
 
-const logPlayersNameDescending = () => {
-    const namesArray = getNamesArray(playersData);
+const logPlayersNameDescending = (playersList) => {
+    const namesArray = getNamesArray(playersList);
     const descendingNamesArray = getDescendingNamesArray(namesArray);
     console.log(descendingNamesArray);
 }
 
 // TESTING
-// logPlayersNameDescending();
+// const playersArray = data.getPlayers();
+// logPlayersNameDescending(playersArray);
 
+// NOTE
+// Same as above type checking can be added to avoid runtime error if argument is not iterable
+// if (typeof playersList !== 'object') {
+//  return console.log('ERROR: Handling error as playersList is not a type of object so it is not iterable');
+// }
 
 
 /**
@@ -78,25 +80,35 @@ const logPlayersNameDescending = () => {
 // Your code
 
 // REFACTOR data naming
-const getArrayOfScoringChance = (playersData) => {
-    const scoringChanceArray = playersData.map((player) => parseInt(player.scoringChance))
-    if (!scoringChanceArray.includes(NaN)) return scoringChanceArray;
-    throw Error('ERROR: scoringChance conversion to integer returns NaN')
+const getArrayOfScoringChance = (playersList) => {
+    return playersList.map((player) => parseInt(player.scoringChance))
 }
 
-const getAverageGoalsPerMatch = (playersData) => {
-    const scoringChanceArray = getArrayOfScoringChance(playersData);
-    console.log('scoringChanceArray', scoringChanceArray)
+const getAverageGoalsPerMatch = (playersList) => {
+    const scoringChanceArray = getArrayOfScoringChance(playersList);
     return scoringChanceArray.reduce((a, b) => a + b, 0) / 100;
 }
 
-const logAverageGoalPerMatch = () => {
-    const averageGoalPerMatch = getAverageGoalsPerMatch(playersData)
+const logAverageGoalPerMatch = (playersList) => {
+    const averageGoalPerMatch = getAverageGoalsPerMatch(playersList)
     console.log('Average goals per match: ' + averageGoalPerMatch)
 }
 
 // TESTING
-// logAverageGoalPerMatch();
+const playersArray = data.getPlayers();
+logAverageGoalPerMatch(playersArray);
+
+// NOTE
+// one of the scoringChance in the data is type of string, it can be converted to integer though
+// further error handling can be introduced in case if the incoming data cannot be converted
+// something along the lines bellow:
+
+// const getArrayOfScoringChance = (playersList) => {
+//     const scoringChanceArray = playersList.map((player) => parseInt(player.scoringChance))
+//     if (!scoringChanceArray.includes(NaN)) return scoringChanceArray;
+//     return console.log('ERROR: Handling if scoringChance conversion to integer returns NaN')
+// }
+
 
 /**
  * Test 4
