@@ -12,21 +12,34 @@ const data = require("./data");
  */
 
  // Your code
-//  thing about execution/ function structure
-const playersData = data.getPlayers();
 
-const printPlayersDetails = (data) => {
+const printPlayersDetails = (playersList) => {
     let result = '';
-    data.forEach((player, index) => {
+
+    if (typeof playersList !== 'object') {
+        return console.log('ERROR: Handling error as playersList is not a type of object so it is not iterable');
+    }
+
+    playersList.forEach((player, index) => {
         result += `PLAYER ${index + 1}\n`;
         for (const [key, value] of Object.entries(player)) {
             result += `${key.toUpperCase()}: ${value}\n`;
         };
     });
-    return result;
+
+    console.log(result);
 }
 
-console.log(printPlayersDetails(playersData));
+// TESTING
+// const playersArray = data.getPlayers();
+// // Test for expected behaviour
+// printPlayersDetails(playersArray);
+// // Test for not iterable argument
+// printPlayersDetails('hello');
+// // Test for iterable argument that doesn't have to expected structure
+// printPlayersDetails(['hell', 'hello'])
+// // Test for iterable argument that doesn't have to expected structure
+// printPlayersDetails([3, 3])
 
 /**
  * Test 2
@@ -49,7 +62,8 @@ const logPlayersNameDescending = () => {
     console.log(descendingNamesArray);
 }
 
-logPlayersNameDescending();
+// TESTING
+// logPlayersNameDescending();
 
 
 
@@ -65,11 +79,14 @@ logPlayersNameDescending();
 
 // REFACTOR data naming
 const getArrayOfScoringChance = (playersData) => {
-    return playersData.map((player) => parseInt(player.scoringChance))
+    const scoringChanceArray = playersData.map((player) => parseInt(player.scoringChance))
+    if (!scoringChanceArray.includes(NaN)) return scoringChanceArray;
+    throw Error('ERROR: scoringChance conversion to integer returns NaN')
 }
 
 const getAverageGoalsPerMatch = (playersData) => {
     const scoringChanceArray = getArrayOfScoringChance(playersData);
+    console.log('scoringChanceArray', scoringChanceArray)
     return scoringChanceArray.reduce((a, b) => a + b, 0) / 100;
 }
 
@@ -78,7 +95,8 @@ const logAverageGoalPerMatch = () => {
     console.log('Average goals per match: ' + averageGoalPerMatch)
 }
 
-logAverageGoalPerMatch();
+// TESTING
+// logAverageGoalPerMatch();
 
 /**
  * Test 4
@@ -97,8 +115,9 @@ const getPlayerPosition = (playersList, playerName) => {
     };
 }
 
-getPlayerPosition(playersData, 'Florin');
-getPlayerPosition(playersData, 'Daniel');
+// TESTING
+// getPlayerPosition(playersData, 'Florin');
+// getPlayerPosition(playersData, 'Daniel');
 
 /**
  * Test 5
@@ -154,12 +173,5 @@ const logRandomTeamsFinalScore = (playersList) => {
     console.log(`The random team split score is: \n TeamA: ${Math.round(teamAScore)} vs TeamB: ${Math.round(teamBScore)}`)
 }
 
-logRandomTeamsFinalScore(playersData);
-
-// console.log(splitPlayersInTeams(playersData));
-// console.log(splitPlayersInTeams([
-//     {
-//         name: 'test'
-//     }
-// ]))
-// console.log('Random index in the array', getRandomIndexOfArray(playersData))
+// TESTING
+// logRandomTeamsFinalScore(playersData);
