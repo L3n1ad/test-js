@@ -93,8 +93,8 @@ const getPlayerPosition = (playersList, playerName) => {
     if (player) {
         console.log(`${playerName}'s position is ${player.position}`);   
     } else {
-        console.log('Players name doesn\'t exist in the given list')
-    }
+        console.log('Players name doesn\'t exist in the given list');
+    };
 }
 
 getPlayerPosition(playersData, 'Florin');
@@ -111,8 +111,55 @@ getPlayerPosition(playersData, 'Daniel');
 
 // Your code
 
-// get the number of players in the list to determine if they can be split equally
 // create a random num generator between numbers
+const getRandomIndexOfArray = (array) => {
+    const min = 0;
+    const max = array.length;
+    const randomFloat = Math.random() * (max - min) + min;
+    return Math.floor(randomFloat);
+}
+
+// get the number of players in the list to determine if they can be split equally
 // taking rounds between team A and B using the random generator pick a random player
+const splitPlayersInTeams = (playersList) => {
+    if (playersList.length % 2 !== 0) return "Players cannot split equally";
+    const copyPlayersList = [...playersList];
+    const teamA = [];
+    const teamB = [];
+    let teamATurn = true;
+    console.log('Copy players list: ', copyPlayersList.length)
+    while (copyPlayersList.length) {
+        const randomIndex = getRandomIndexOfArray(copyPlayersList);
+        const randomPlayer = copyPlayersList.splice(randomIndex, 1)[0];
+        teamATurn ? teamA.push(randomPlayer) : teamB.push(randomPlayer);
+        teamATurn = !teamATurn;
+    }
+    console.log({
+        teamA,
+        teamB,
+    })
+    return {
+        teamA,
+        teamB,
+    }
+}
 // using previous averageGoalPerMatch function to calculate each teams possible score rounded to the closest int
 // log the final match score out 
+const logRandomTeamsFinalScore = (playersList) => {
+    const randomTeamsObject = splitPlayersInTeams(playersList);
+    const teamAScore = getAverageGoalsPerMatch(randomTeamsObject.teamA);
+    const teamBScore = getAverageGoalsPerMatch(randomTeamsObject.teamB);
+    // console.log('TeamA avarage score: ', teamAFlatScore)
+    // console.log('TeamB avarage score: ', teamBFlatScore)
+    console.log(`The random team split score is: \n TeamA: ${Math.round(teamAScore)} vs TeamB: ${Math.round(teamBScore)}`)
+}
+
+logRandomTeamsFinalScore(playersData);
+
+// console.log(splitPlayersInTeams(playersData));
+// console.log(splitPlayersInTeams([
+//     {
+//         name: 'test'
+//     }
+// ]))
+// console.log('Random index in the array', getRandomIndexOfArray(playersData))
