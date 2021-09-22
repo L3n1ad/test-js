@@ -12,8 +12,21 @@ const data = require("./data");
  */
 
  // Your code
+//  thing about execution/ function structure
+const playersData = data.getPlayers();
 
+const printPlayersDetails = (data) => {
+    let result = '';
+    data.forEach((player, index) => {
+        result += `PLAYER ${index + 1}\n`;
+        for (const [key, value] of Object.entries(player)) {
+            result += `${key.toUpperCase()}: ${value}\n`;
+        };
+    });
+    return result;
+}
 
+console.log(printPlayersDetails(playersData));
 
 /**
  * Test 2
@@ -21,8 +34,22 @@ const data = require("./data");
  */
 
 // Your code
+// REFACTOR data naming possible structure?
+const getNamesArray = (playersData) => {
+    return playersData.map((player) => player.name);
+}
 
+const getDescendingNamesArray = (namesArray) => {
+    return namesArray.sort((a, b) => (a.length < b.length) ? 1 : -1)
+}
 
+const logPlayersNameDescending = () => {
+    const namesArray = getNamesArray(playersData);
+    const descendingNamesArray = getDescendingNamesArray(namesArray);
+    console.log(descendingNamesArray);
+}
+
+logPlayersNameDescending();
 
 
 
@@ -36,7 +63,22 @@ const data = require("./data");
 
 // Your code
 
+// REFACTOR data naming
+const getArrayOfScoringChance = (playersData) => {
+    return playersData.map((player) => parseInt(player.scoringChance))
+}
 
+const getAverageGoalsPerMatch = (playersData) => {
+    const scoringChanceArray = getArrayOfScoringChance(playersData);
+    return scoringChanceArray.reduce((a, b) => a + b, 0) / 100;
+}
+
+const logAverageGoalPerMatch = () => {
+    const averageGoalPerMatch = getAverageGoalsPerMatch(playersData)
+    console.log('Average goals per match: ' + averageGoalPerMatch)
+}
+
+logAverageGoalPerMatch();
 
 /**
  * Test 4
@@ -44,8 +86,19 @@ const data = require("./data");
  */
 
 // Your code
+// REFACTOR to thing about multiple players with the same name 
+// try to make it moduler/sinlge responsibility
+const getPlayerPosition = (playersList, playerName) => {
+    const player = playersList.filter(player => player.name === playerName)[0];
+    if (player) {
+        console.log(`${playerName}'s position is ${player.position}`);   
+    } else {
+        console.log('Players name doesn\'t exist in the given list')
+    }
+}
 
-
+getPlayerPosition(playersData, 'Florin');
+getPlayerPosition(playersData, 'Daniel');
 
 /**
  * Test 5
@@ -57,3 +110,9 @@ const data = require("./data");
  */
 
 // Your code
+
+// get the number of players in the list to determine if they can be split equally
+// create a random num generator between numbers
+// taking rounds between team A and B using the random generator pick a random player
+// using previous averageGoalPerMatch function to calculate each teams possible score rounded to the closest int
+// log the final match score out 
