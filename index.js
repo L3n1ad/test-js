@@ -28,7 +28,6 @@ const printPlayersDetails = (playersList) => {
 
 // TESTING
 // const playersArray = data.getPlayers();
-// // Test for expected behaviour
 // printPlayersDetails(playersArray);
 
 // NOTE
@@ -95,8 +94,8 @@ const logAverageGoalPerMatch = (playersList) => {
 }
 
 // TESTING
-const playersArray = data.getPlayers();
-logAverageGoalPerMatch(playersArray);
+// const playersArray = data.getPlayers();
+// logAverageGoalPerMatch(playersArray);
 
 // NOTE
 // one of the scoringChance in the data is type of string, it can be converted to integer though
@@ -116,20 +115,35 @@ logAverageGoalPerMatch(playersArray);
  */
 
 // Your code
-// REFACTOR to thing about multiple players with the same name 
-// try to make it moduler/sinlge responsibility
+
 const getPlayerPosition = (playersList, playerName) => {
-    const player = playersList.filter(player => player.name === playerName)[0];
-    if (player) {
-        console.log(`${playerName}'s position is ${player.position}`);   
+    const players = playersList.filter(player => player.name === playerName);
+    if (players.length === 1) {
+        console.log(`${playerName}'s position is ${players[0].position}`);   
     } else {
         console.log('Players name doesn\'t exist in the given list');
     };
 }
 
 // TESTING
-// getPlayerPosition(playersData, 'Florin');
-// getPlayerPosition(playersData, 'Daniel');
+// const playersArray = data.getPlayers();
+// getPlayerPosition(playersArray, 'Florin');
+// getPlayerPosition(playersArray, 'Daniel');
+
+// NOTE
+// In case if there are multiple players with the same name the following adjustment can be implemented
+
+// const getPlayerPosition = (playersList, playerName) => {
+//     const players = playersList.filter(player => player.name === playerName);
+//     if (players.length === 1) {
+//         console.log(`${playerName}'s position is ${players[0].position}`);
+//     } else if (players.length > 1) {
+//         const playersPositionsArray = players.map((player) => player.position)
+//         console.log(`For the searched ${playerName} name their are multiple players with the following positions: ${playersPositionsArray}`)
+//     } else {
+//         console.log('Players name doesn\'t exist in the given list');
+//     };
+// }
 
 /**
  * Test 5
@@ -142,7 +156,6 @@ const getPlayerPosition = (playersList, playerName) => {
 
 // Your code
 
-// create a random num generator between numbers
 const getRandomIndexOfArray = (array) => {
     const min = 0;
     const max = array.length;
@@ -150,40 +163,37 @@ const getRandomIndexOfArray = (array) => {
     return Math.floor(randomFloat);
 }
 
-// get the number of players in the list to determine if they can be split equally
-// taking rounds between team A and B using the random generator pick a random player
 const splitPlayersInTeams = (playersList) => {
     if (playersList.length % 2 !== 0) return "Players cannot split equally";
     const copyPlayersList = [...playersList];
     const teamA = [];
     const teamB = [];
     let teamATurn = true;
-    console.log('Copy players list: ', copyPlayersList.length)
+
     while (copyPlayersList.length) {
         const randomIndex = getRandomIndexOfArray(copyPlayersList);
         const randomPlayer = copyPlayersList.splice(randomIndex, 1)[0];
         teamATurn ? teamA.push(randomPlayer) : teamB.push(randomPlayer);
         teamATurn = !teamATurn;
     }
-    console.log({
-        teamA,
-        teamB,
-    })
+
     return {
         teamA,
         teamB,
     }
 }
-// using previous averageGoalPerMatch function to calculate each teams possible score rounded to the closest int
-// log the final match score out 
+
 const logRandomTeamsFinalScore = (playersList) => {
     const randomTeamsObject = splitPlayersInTeams(playersList);
+    if (typeof randomTeamsObject === 'string') return console.log(randomTeamsObject);
     const teamAScore = getAverageGoalsPerMatch(randomTeamsObject.teamA);
     const teamBScore = getAverageGoalsPerMatch(randomTeamsObject.teamB);
-    // console.log('TeamA avarage score: ', teamAFlatScore)
-    // console.log('TeamB avarage score: ', teamBFlatScore)
+
     console.log(`The random team split score is: \n TeamA: ${Math.round(teamAScore)} vs TeamB: ${Math.round(teamBScore)}`)
 }
 
 // TESTING
-// logRandomTeamsFinalScore(playersData);
+// const playersArray = data.getPlayers();
+// logRandomTeamsFinalScore(playersArray);
+// logRandomTeamsFinalScore(['testing', 'not', 'even']);
+
