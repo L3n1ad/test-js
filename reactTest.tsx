@@ -5,7 +5,7 @@
  * - These are a theoretical questions, there is no need to install packages or run the code.
  */
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 /**
  * TEST 1
@@ -22,8 +22,20 @@ interface ITest1ComponentProps {
     age:number;
 }
 
-export const Test1Component = (props: ITest1ComponentProps) => {
+export const Test1Component = ({ name, age }: ITest1ComponentProps) => {
+    const [nameColor, setNameColor] = useState('');
 
+    useEffect(() => {
+        setNameColor(age >= 18 ? 'red' : 'blue')
+    }, [age])
+
+    return (
+        <div>
+            <h2>Test 1 component</h2>
+            <h3 style={{ color: nameColor }} >{name}</h3>
+            <h3>Age: {age}</h3>
+        </div>
+    )
 }
 
 
@@ -61,11 +73,24 @@ interface ITest2ComponentProps {
     name: string;
 }
 
-export const Test2Component = (props: ITest2ComponentProps) => {
+export const Test2Component = ({ name }: ITest2ComponentProps) => {
+    const [age, setAge] = useState(0)
 
     useEffect(() => {
-    }, []);
-    
+        async function fetchAge(name: string) {
+            const response = await getAge(name);
+            setAge(response);
+        }
+
+        fetchAge(name);
+    }, [name]);
+
+    return (
+        <>
+            <h2>Test 2 component</h2>
+            <Test1Component age={age} name={name} />
+        </>
+    )
 }
 
 
