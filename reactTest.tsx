@@ -26,15 +26,11 @@ export const Test1Component = ({ name, age }: ITest1ComponentProps) => {
     const [nameColor, setNameColor] = useState('');
 
     useEffect(() => {
-        setNameColor(age >= 18 ? 'red' : 'blue')
+        setNameColor(age >= 18 ? 'blue' : 'red')
     }, [age])
 
     return (
-        <div>
-            <h2>Test 1 component</h2>
-            <h3 style={{ color: nameColor }} >{name}</h3>
-            <h3>Age: {age}</h3>
-        </div>
+        <h3 style={{ color: nameColor }} >{name}</h3>
     )
 }
 
@@ -86,10 +82,7 @@ export const Test2Component = ({ name }: ITest2ComponentProps) => {
     }, [name]);
 
     return (
-        <>
-            <h2>Test 2 component</h2>
-            <Test1Component age={age} name={name} />
-        </>
+        <Test1Component age={age} name={name} />
     )
 }
 
